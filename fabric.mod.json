@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "dexvisual",
+  "version": "${version}",
+  "name": "DEX VISUAL",
+  "description": "Client-side visuals for Minecraft 1.21.4",
+  "authors": ["Asilbek"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": { "client": ["uz.dexvisual.DexVisual"] },
+  "mixins": ["dexvisual.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
