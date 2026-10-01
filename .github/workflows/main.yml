@@ -12,15 +12,20 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.12"
-      - name: Unzip sources
+      - name: Assemble project from flat files
         run: |
-          Z=$(find . -name "*.zip" -not -path "./.git/*" | head -1)
-          echo "Found zip: $Z"
-          if [ -z "$Z" ]; then ls -R | head -40; exit 1; fi
-          unzip -q "$Z" -d unpacked
+          D=proj/src/main/java/uz/dexvisual
+          mkdir -p $D/mixin proj/src/main/resources/assets/dexvisual/lang
+          rm -f DexScreen.java Modules.java DexVisualClient.java
+          mv EntityMixin.java GameRendererMixin.java SimpleOptionAccessor.java $D/mixin/
+          mv *.java $D/
+          mv fabric.mod.json dexvisual.mixins.json proj/src/main/resources/
+          mv en_us.json proj/src/main/resources/assets/dexvisual/lang/
+          mv build.gradle settings.gradle gradle.properties proj/
+          find proj -type f | sort
       - run: gradle build --no-daemon
-        working-directory: unpacked/dex-visual
+        working-directory: proj
       - uses: actions/upload-artifact@v4
         with:
           name: DEX-VISUAL
-          path: unpacked/dex-visual/build/libs/dex-visual-1.0.0.jar
+          path: proj/build/libs/dex-visual-1.0.0.jar
