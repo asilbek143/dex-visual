@@ -12,7 +12,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.12"
-      - run: unzip -q "*.zip" -d unpacked
+      - name: Unzip sources
+        run: |
+          Z=$(find . -name "*.zip" -not -path "./.git/*" | head -1)
+          echo "Found zip: $Z"
+          if [ -z "$Z" ]; then ls -R | head -40; exit 1; fi
+          unzip -q "$Z" -d unpacked
       - run: gradle build --no-daemon
         working-directory: unpacked/dex-visual
       - uses: actions/upload-artifact@v4
